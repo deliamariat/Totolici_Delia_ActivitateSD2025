@@ -105,6 +105,5 @@ int main() {
     int numarLitere = calculeazaNumarLitereTitlu(doc1);
     printf("\nNumarul de litere din titlul nou: %d\n", numarLitere);
     eliberareMemorie(&doc1);
-
     return 0;
 }
