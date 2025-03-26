@@ -4,107 +4,107 @@
 #include <string.h>
 #include <ctype.h>
 
-struct Articol {
+struct Document {
     int id;
     char* titlu;
     int numarPagini;
     char* continut;
 };
 
-typedef struct Articol Articol;
+typedef struct Document Document;
 
-Articol initializare(const char* titlu, int id, int numarPagini, const char* continut) {
-    Articol art;
+Document initializare(const char* titlu, int id, int numarPagini, const char* continut) {
+    Document doc;
     if (titlu != NULL) {
-        art.titlu = (char*)malloc(sizeof(char) * (strlen(titlu) + 1));
-        strcpy_s(art.titlu, strlen(titlu) + 1, titlu);
+        doc.titlu = (char*)malloc(sizeof(char) * (strlen(titlu) + 1));
+        strcpy_s(doc.titlu, strlen(titlu) + 1, titlu);
     }
     else {
-        art.titlu = NULL;
+        doc.titlu = NULL;
     }
-    art.id = id;
-    art.numarPagini = numarPagini;
+    doc.id = id;
+    doc.numarPagini = numarPagini;
 
     if (continut != NULL) {
-        art.continut = (char*)malloc(sizeof(char) * (strlen(continut) + 1));
-        strcpy_s(art.continut, strlen(continut) + 1, continut);
+        doc.continut = (char*)malloc(sizeof(char) * (strlen(continut) + 1));
+        strcpy_s(doc.continut, strlen(continut) + 1, continut);
     }
     else {
-        art.continut = NULL;
+        doc.continut = NULL;
     }
 
-    return art;
+    return doc;
 }
 
-Articol citesteArticol() {
-    Articol art;
+Document citesteDocument() {
+    Document doc;
     char titlu[100];
     char continut[500];
 
-    printf("Introduceti ID-ul articolului: ");
-    scanf("%d", &art.id);
+    printf("Introduceti ID-ul documentului: ");
+    scanf("%d", &doc.id);
 
     getchar();
 
-    printf("Introduceti titlul articolului: ");
+    printf("Introduceti titlul documentului: ");
     fgets(titlu, 100, stdin);
     titlu[strcspn(titlu, "\n")] = 0;
 
     printf("Introduceti numarul de pagini: ");
-    scanf("%d", &art.numarPagini);
+    scanf("%d", &doc.numarPagini);
 
     getchar();
 
-    printf("Introduceti continutul articolului: ");
+    printf("Introduceti continutul documentului: ");
     fgets(continut, 500, stdin);
     continut[strcspn(continut, "\n")] = 0;
 
-    art = initializare(titlu, art.id, art.numarPagini, continut);
+    doc = initializare(titlu, doc.id, doc.numarPagini, continut);
 
-    return art;
+    return doc;
 }
 
-int calculeazaNumarLitereTitlu(Articol art) {
+int calculeazaNumarLitereTitlu(Document doc) {
     int numarLitere = 0;
-    for (int i = 0; art.titlu[i] != '\0'; i++) {
-        if (isalpha(art.titlu[i])) {
+    for (int i = 0; doc.titlu[i] != '\0'; i++) {
+        if (isalpha(doc.titlu[i])) {
             numarLitere++;
         }
     }
     return numarLitere;
 }
 
-void modificaTitlu(Articol* art, const char* noulTitlu) {
-    free(art->titlu);
-    art->titlu = (char*)malloc((strlen(noulTitlu) + 1) * sizeof(char));
-    strcpy_s(art->titlu, strlen(noulTitlu) + 1, noulTitlu);
+void modificaTitlu(Document* doc, const char* noulTitlu) {
+    free(doc->titlu);
+    doc->titlu = (char*)malloc((strlen(noulTitlu) + 1) * sizeof(char));
+    strcpy_s(doc->titlu, strlen(noulTitlu) + 1, noulTitlu);
 }
 
-void afisare(Articol art) {
-    printf("\nID Articol: %d\n", art.id);
-    printf("Titlu: %s\n", art.titlu);
-    printf("Numar de pagini: %d\n", art.numarPagini);
-    printf("Continut: %s\n", art.continut);
+void afisare(Document doc) {
+    printf("\nID Document: %d\n", doc.id);
+    printf("Titlu: %s\n", doc.titlu);
+    printf("Numar de pagini: %d\n", doc.numarPagini);
+    printf("Continut: %s\n", doc.continut);
 }
 
-void eliberareMemorie(Articol* art) {
-    if (art->titlu != NULL) {
-        free(art->titlu);
+void eliberareMemorie(Document* doc) {
+    if (doc->titlu != NULL) {
+        free(doc->titlu);
     }
-    if (art->continut != NULL) {
-        free(art->continut);
+    if (doc->continut != NULL) {
+        free(doc->continut);
     }
 }
 
 int main() {
-    Articol art1 = citesteArticol();
-    afisare(art1);
-    modificaTitlu(&art1, "Titlu nou va rog");
-    printf("\nArticol dupa modificare:\n");
-    afisare(art1);
-    int numarLitere = calculeazaNumarLitereTitlu(art1);
+    Document doc1 = citesteDocument();
+    afisare(doc1);
+    modificaTitlu(&doc1, "Titlu nou va rog");
+    printf("\nDocument dupa modificare:\n");
+    afisare(doc1);
+    int numarLitere = calculeazaNumarLitereTitlu(doc1);
     printf("\nNumarul de litere din titlul nou: %d\n", numarLitere);
-    eliberareMemorie(&art1);
+    eliberareMemorie(&doc1);
 
     return 0;
 }
