@@ -2,84 +2,109 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
-typedef struct DistribuitorTransport {
-    int cod;
-    char* denumire;
-    int nrProduse;
-    float* preturi;
-} DistribuitorTransport;
+struct Articol {
+    int id;
+    char* titlu;
+    int numarPagini;
+    char* continut;
+};
 
-void afisareDistribuitor(DistribuitorTransport articol) {
-    printf("Cod: %d\n", articol.cod);
-    printf("Denumire: %s\n", articol.denumire);
-    printf("Numar produse: %d\n", articol.nrProduse);
-    printf("Preturi: ");
-    for (int i = 0; i < articol.nrProduse; i++) {
-        printf("%.2f ", articol.preturi[i]);
+typedef struct Articol Articol;
+
+Articol initializare(const char* titlu, int id, int numarPagini, const char* continut) {
+    Articol art;
+    if (titlu != NULL) {
+        art.titlu = (char*)malloc(sizeof(char) * (strlen(titlu) + 1));
+        strcpy_s(art.titlu, strlen(titlu) + 1, titlu);
     }
-    printf("\n");
-}
-
-float calculeazaMediaPreturilor(DistribuitorTransport articol) {
-    if (articol.nrProduse == 0) return 0;
-    float suma = 0;
-    for (int i = 0; i < articol.nrProduse; i++) {
-        suma += articol.preturi[i];
+    else {
+        art.titlu = NULL;
     }
-    return suma / articol.nrProduse;
+    art.id = id;
+    art.numarPagini = numarPagini;
+
+    if (continut != NULL) {
+        art.continut = (char*)malloc(sizeof(char) * (strlen(continut) + 1));
+        strcpy_s(art.continut, strlen(continut) + 1, continut);
+    }
+    else {
+        art.continut = NULL;
+    }
+
+    return art;
 }
 
-void modificaDenumire(DistribuitorTransport* articol, const char* nouaDenumire) {
-    free(articol->denumire);
-    articol->denumire = (char*)malloc(strlen(nouaDenumire) + 1);
-    strcpy_s(articol->denumire, strlen(nouaDenumire) + 1, nouaDenumire);
-}
+Articol citesteArticol() {
+    Articol art;
+    char titlu[100];
+    char continut[500];
 
-DistribuitorTransport citesteDistribuitor() {
-    DistribuitorTransport articol;
-    printf("Introdu codul articolului: ");
-    scanf_s("%d", &articol.cod);
+    printf("Introduceti ID-ul articolului: ");
+    scanf("%d", &art.id);
+
     getchar();
-    char buffer[100];
-    printf("Introdu denumirea articolului: ");
-    fgets(buffer, sizeof(buffer), stdin);
-    buffer[strcspn(buffer, "\n")] = 0;
-    articol.denumire = (char*)malloc(strlen(buffer) + 1);
-    strcpy_s(articol.denumire, strlen(buffer) + 1, buffer);
-    printf("Introdu numarul de produse: ");
-    scanf_s("%d", &articol.nrProduse);
-    articol.preturi = (float*)malloc(articol.nrProduse * sizeof(float));
-    for (int i = 0; i < articol.nrProduse; i++) {
-        printf("Pretul produsului %d: ", i + 1);
-        scanf_s("%f", &articol.preturi[i]);
-    }
 
-    return articol;
+    printf("Introduceti titlul articolului: ");
+    fgets(titlu, 100, stdin);
+    titlu[strcspn(titlu, "\n")] = 0;
+
+    printf("Introduceti numarul de pagini: ");
+    scanf("%d", &art.numarPagini);
+
+    getchar();
+
+    printf("Introduceti continutul articolului: ");
+    fgets(continut, 500, stdin);
+    continut[strcspn(continut, "\n")] = 0;
+
+    art = initializare(titlu, art.id, art.numarPagini, continut);
+
+    return art;
 }
 
-void dezalocare(DistribuitorTransport* articol) {
-    free(articol->denumire);
-    free(articol->preturi);
+int calculeazaNumarLitereTitlu(Articol art) {
+    int numarLitere = 0;
+    for (int i = 0; art.titlu[i] != '\0'; i++) {
+        if (isalpha(art.titlu[i])) {
+            numarLitere++;
+        }
+    }
+    return numarLitere;
+}
+
+void modificaTitlu(Articol* art, const char* noulTitlu) {
+    free(art->titlu);
+    art->titlu = (char*)malloc((strlen(noulTitlu) + 1) * sizeof(char));
+    strcpy_s(art->titlu, strlen(noulTitlu) + 1, noulTitlu);
+}
+
+void afisare(Articol art) {
+    printf("\nID Articol: %d\n", art.id);
+    printf("Titlu: %s\n", art.titlu);
+    printf("Numar de pagini: %d\n", art.numarPagini);
+    printf("Continut: %s\n", art.continut);
+}
+
+void eliberareMemorie(Articol* art) {
+    if (art->titlu != NULL) {
+        free(art->titlu);
+    }
+    if (art->continut != NULL) {
+        free(art->continut);
+    }
 }
 
 int main() {
-    DistribuitorTransport articol = citesteDistribuitor();
-    afisareDistribuitor(articol);
-
-    printf("Media preturilor: %.2f\n", calculeazaMediaPreturilor(articol));
-
-    printf("Introdu noua denumire a articolului: ");
-    char buffer[100];
-    getchar();
-    fgets(buffer, sizeof(buffer), stdin);
-    buffer[strcspn(buffer, "\n")] = 0;
-    modificaDenumire(&articol, buffer);
-
-    printf("Dupa modificare:\n");
-    afisareDistribuitor(articol);
-
-    dezalocare(&articol);
+    Articol art1 = citesteArticol();
+    afisare(art1);
+    modificaTitlu(&art1, "Titlu nou va rog");
+    printf("\nArticol dupa modificare:\n");
+    afisare(art1);
+    int numarLitere = calculeazaNumarLitereTitlu(art1);
+    printf("\nNumarul de litere din titlul nou: %d\n", numarLitere);
+    eliberareMemorie(&art1);
 
     return 0;
 }
