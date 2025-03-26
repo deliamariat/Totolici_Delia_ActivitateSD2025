@@ -87,6 +87,5 @@ int main() {
 	masini = citireVectorMasiniFisier("masini.txt", &nrMasini);
 	afisareVectorMasini(masini, nrMasini);
 	dezalocareVectorMasini(&masini, &nrMasini);
-
 	return 0;
 }
