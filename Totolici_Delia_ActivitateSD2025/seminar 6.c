@@ -167,7 +167,7 @@ int main() {
 	HashTable tabelaHash;
 	tabelaHash = citireMasiniDinFisier("masini.txt", 7);
 	afisareTabelaDeMasini(tabelaHash);
-	Masina m; 
+	Masina m;
 	m = getMasinaDupaCheie(tabelaHash, 'A');
 	if (m.id != -1) {
 		printf("\nMasina cu seria A:\n ");
