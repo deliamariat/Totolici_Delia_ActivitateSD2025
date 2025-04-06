@@ -10,7 +10,7 @@ struct StructuraMasina {
 	char* model;
 	char* numeSofer;
 	unsigned char serie;
-};
+}; 
 typedef struct StructuraMasina Masina;
 
 struct Nod {
