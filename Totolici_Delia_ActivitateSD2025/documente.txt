@@ -1,0 +1,10 @@
+1,Fructe,30,Despre fructe si beneficiile lor
+2,Legume,20,Despre legume si beneficiile lor
+3,Cybersecurity,100,Jobul tau de viitor
+4,Licenta,80,Sistem informational pentru invatarea limbii japoneze
+5,Cocktails,55,Invata-le sa le faci de la 0
+6,Top secret,60,----------
+7,Korean skincare,70,The best skincare products
+8,Tourists scams,56,Be careful around the world
+9,Gatitul la tigaie,45,Retete rapide si gustoase
+10,Plante medicinale,38,Remedii naturale din plante
